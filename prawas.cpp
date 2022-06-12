@@ -1,11 +1,14 @@
 #include <iostream>
 #include < algorithm >
+#include<vector>
+#include <map>
 
 using namespace std;
 
 #define SIZE 14
 #define Allowed_PRAWAS 3 //weekly
 #define NO_OF_SHAKHA 8
+
 
 char shakha[][256] = { "Madhav",
 					   "shivaji",
@@ -45,6 +48,7 @@ static int end_date=30;
 static int week_end1 = 4;
 static int week_end2 = 5;
 
+multimap <string, int> shakha_exception;
 
 
 int visited[SIZE] = { 0 };
@@ -55,6 +59,26 @@ int day = 0;
 bool found = false;
 int remaing_for_prawas = SIZE;
 int shakha_limit = NO_OF_SHAKHA;
+
+struct _RESULT {
+	int size;
+	string prawas[NO_OF_SHAKHA];
+	_RESULT()
+	{
+
+	}
+	_RESULT(int _size, string _prawas)
+	{
+		size = _size;
+		for (int i = 0; i < size; i++)
+		{
+			prawas[i] = _prawas[i];
+		}
+	}
+};
+
+
+vector<_RESULT> final_result;
 
 bool isVisitAllowed(int ii, int prawas_karyakarta_index[8],bool found)
 {
@@ -92,8 +116,15 @@ void check(int count, int index, char prawas[][256],int prawas_karyakarta_index[
 	
 	if( count == shakha_limit)
 	{
+		_RESULT tmpObj;
+		tmpObj.size = count;
 		for (int i = 0; i < shakha_limit; i++)
+		{
 			cout << prawas[i] << " ";
+			tmpObj.prawas[i] = prawas[i];			
+		}
+		final_result.push_back(tmpObj);
+
 		cout << endl;
 		day++;
 		found = true;
@@ -151,12 +182,56 @@ int main()
 	char prawas[NO_OF_SHAKHA][256] = {0};
 	int prawas_karyakarta_index[NO_OF_SHAKHA] = { 0 };
 	int count = 0;
+	// apply exception
 	
+	shakha_exception.insert(pair<string, int>("virendra ji", 3));
+	shakha_exception.insert(pair<string, int>("neeraj ji", 6));
+	shakha_exception.insert(pair<string, int>("ajay ji", 1));
+	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 0));
+	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 1));
+	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 5));
+	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 6));
+	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 7));
+	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 2));
+	shakha_exception.insert(pair<string, int>("rammurty ji", 0));
+	shakha_exception.insert(pair<string, int>("rammurty ji", 1));
+	shakha_exception.insert(pair<string, int>("rammurty ji", 3));
+	shakha_exception.insert(pair<string, int>("rammurty ji", 5));
+	shakha_exception.insert(pair<string, int>("rammurty ji", 6));
+	shakha_exception.insert(pair<string, int>("rammurty ji", 7));
+	shakha_exception.insert(pair<string, int>("surendra ji", 4));
+	shakha_exception.insert(pair<string, int>("abhilash ji", 0));
+	shakha_exception.insert(pair<string, int>("pramod ji", 5));
+	shakha_exception.insert(pair<string, int>("dharmveer ji", 4));
+	shakha_exception.insert(pair<string, int>("lavesh ji", 5));
+	shakha_exception.insert(pair<string, int>("manoj ji", 3));
+	shakha_exception.insert(pair<string, int>("vimal ji", 3));
+	shakha_exception.insert(pair<string, int>("dhruv ji", 1));
+	shakha_exception.insert(pair<string, int>("manish ji", 3));
+
 	std::random_shuffle(std::begin(karykarta), std::end(karykarta));
 	std::random_shuffle(std::begin(karykarta), std::end(karykarta));
 	std::random_shuffle(std::begin(karykarta), std::end(karykarta));
 
 	check(count, 0, prawas, prawas_karyakarta_index);
 
+	
+	
+
+	cout << "---------print final prawas of week -------" << endl;
+	int size = final_result.size();
+	
+	for (int i = 0; i < size; i++)
+	{
+		std::random_shuffle(std::begin(final_result[i].prawas), final_result[i].prawas + final_result[i].size);
+	}
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < final_result[i].size; j++)
+		{
+			cout << final_result[i].prawas[j].c_str() << " ";
+		}
+		cout << endl;
+	}
 	return 0;
 }
