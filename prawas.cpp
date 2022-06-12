@@ -218,13 +218,29 @@ int main()
 	
 	
 
-	cout << "---------print final prawas of week -------" << endl;
 	int size = final_result.size();
 	
 	for (int i = 0; i < size; i++)
 	{
 		std::random_shuffle(std::begin(final_result[i].prawas), final_result[i].prawas + final_result[i].size);
 	}
+	
+
+		for (int i = 0; i < size; i++)
+		{
+			for (int j = 0; j < final_result[i].size; j++)
+			{
+				cout << final_result[i].prawas[j].c_str();
+				auto ret = shakha_exception.equal_range(final_result[i].prawas[j]);
+				for (auto it = ret.first; it != ret.second; ++it) {
+					cout << ' ' << it->second;
+				}
+				cout << endl;
+			}
+			
+		}
+
+		cout << "---------print final prawas of week -------" << endl;
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < final_result[i].size; j++)
