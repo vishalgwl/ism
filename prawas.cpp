@@ -2,11 +2,13 @@
 #include < algorithm >
 #include<vector>
 #include <map>
+#include <time.h>
+#include <stdlib.h>
 
 using namespace std;
 
 #define SIZE 14
-#define Allowed_PRAWAS 3 //weekly
+#define Allowed_PRAWAS 2 //weekly
 #define NO_OF_SHAKHA 8
 
 
@@ -30,6 +32,7 @@ _KARYAKARTA karykarta[SIZE] = {
 							"virendra ji",
 							"neeraj ji",
 							"ajay ji",
+							//"vishal ji",
 							"mananiya chandra mohan ji",
 							"rammurty ji",
 							"surendra ji",
@@ -187,6 +190,7 @@ int main()
 	shakha_exception.insert(pair<string, int>("virendra ji", 3));
 	shakha_exception.insert(pair<string, int>("neeraj ji", 6));
 	shakha_exception.insert(pair<string, int>("ajay ji", 1));
+	shakha_exception.insert(pair<string, int>("vishal ji", 1));
 	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 0));
 	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 1));
 	shakha_exception.insert(pair<string, int>("mananiya chandra mohan ji", 5));
@@ -215,27 +219,52 @@ int main()
 
 	check(count, 0, prawas, prawas_karyakarta_index);
 
-	
-	
+	//srand(time(NULL));   // Initialization, should only be called once.
+	//int r = rand();      // Returns a pseudo-random integer between 0 and RAND_MAX.
+	//r = r % 10;
 
 	int size = final_result.size();
 	
 	for (int i = 0; i < size; i++)
 	{
-		std::random_shuffle(std::begin(final_result[i].prawas), final_result[i].prawas + final_result[i].size);
+		for (int j = 0; j <2; j++)
+		{
+			std::random_shuffle(std::begin(final_result[i].prawas), final_result[i].prawas + final_result[i].size);
+		}
 	}
 	
 
 		for (int i = 0; i < size; i++)
 		{
+			bool bRecheck = false;
 			for (int j = 0; j < final_result[i].size; j++)
 			{
-				cout << final_result[i].prawas[j].c_str();
+				//cout << final_result[i].prawas[j].c_str();
 				auto ret = shakha_exception.equal_range(final_result[i].prawas[j]);
 				for (auto it = ret.first; it != ret.second; ++it) {
-					cout << ' ' << it->second;
+					//cout << ' ' << it->second;
+					if (j == it->second)
+					{
+						//cout << "not allowed";
+						//std::random_shuffle(std::begin(final_result[i].prawas), final_result[i].prawas + final_result[i].size);
+						bRecheck = true;
+						break;
+					}
 				}
-				cout << endl;
+				if (i > 0 && !strcmp(final_result[i].prawas[j].c_str(), final_result[i - 1].prawas[j].c_str()))
+				{
+					//std::random_shuffle(std::begin(final_result[i].prawas), final_result[i].prawas + final_result[i].size);
+					bRecheck = true;
+				}
+				
+				if (bRecheck)
+				{
+					std::random_shuffle(std::begin(final_result[i].prawas), final_result[i].prawas + final_result[i].size);
+					bRecheck = false;
+					j = -1;
+					continue;
+				}
+				//cout << endl;
 			}
 			
 		}
